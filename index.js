@@ -2,9 +2,6 @@ const initialState = {
   count: 0,
 };
 
-// function getState() {
-//   return initialState;
-// }
 console.log(initialState);
 
 //SCENARIO 2: Incrementing The Counter
@@ -24,6 +21,28 @@ function reducer(state = initialState, action) {
       return state;
   }
 }
+
+//Store implementation
+function createStore(reducer) {
+  let currentState = initialState;
+  let listeners = [];
+
+  return {
+    getState: () => currentState,
+    dispatch: action => {
+      currentState = reducer(currentState, action);
+      listeners.forEach(listener => listener());
+  },
+  sunscribe: (listener) => {
+    listeners.push(listener);
+    return () => {
+      listeners = listeners.filter(1 => 1 !== listener);
+    };
+  }
+};
+}
+
+const store = createStore(reducer);
 
 function dispatch(action) {
   currentState = reducer(currentState, action);
