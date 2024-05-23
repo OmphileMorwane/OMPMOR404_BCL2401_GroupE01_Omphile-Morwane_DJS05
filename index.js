@@ -1,17 +1,34 @@
-// ### SCENARIO 1: Initial State Verification
-// ```
-// GIVEN no interactions have been performed yet
-// WHEN the “getState” method is run
-// AND the result is logged to the console
-// AND the browser console is open
-// THEN the state should show a count of 0
-
+//SCENARIO 1: Initial State Verification
 const initialState = {
-  count: 0
+  count: 0,
 };
+console.log(initialState);
+
+//SCENARIO 2: Incrementing The Counter
+const ADD = "ADD";
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case ADD:
+      return { count: state.count + 1 };
+      default:
+        return state;
+  }
+}
+
+function dispatch(action) {
+  currentState = reducer(currentState, action);
+}
+
+let currentState = initialState;
 
 function getState() {
-  return initialState;
+  return currentState;
 }
+
+dispatch({ type: ADD });
+console.log(getState());
+
+dispatch({ type: ADD });
 console.log(getState());
 
