@@ -2,9 +2,6 @@ const initialState = {
   count: 0,
 };
 
-console.log(initialState);
-
-//SCENARIO 2: Incrementing The Counter
 const ADD = "ADD";
 const SUBTRACT = "SUBTRACT";
 const RESET = "RESET";
@@ -29,39 +26,36 @@ function createStore(reducer) {
 
   return {
     getState: () => currentState,
-    dispatch: action => {
+    dispatch: (action) => {
       currentState = reducer(currentState, action);
-      listeners.forEach(listener => listener());
-  },
-  sunscribe: (listener) => {
-    listeners.push(listener);
-    return () => {
-      listeners = listeners.filter(1 => 1 !== listener);
-    };
-  }
-};
+      listeners.forEach((listener) => listener());
+    },
+    subscribe: (listener) => {
+      listeners.push(listener);
+      return () => {
+        listeners = listeners.filter(l => l !== listener);
+      };
+    },
+  };
 }
 
+//Function that creates a store
 const store = createStore(reducer);
 
-function dispatch(action) {
-  currentState = reducer(currentState, action);
-}
+//Subscribe to state changes
+store.subscribe(() => {
+  console.log(store.getState());
+});
 
-let currentState = initialState;
+//Initial state verification
+console.log(store.getState());
 
-function getState() {
-  return currentState;
-}
+//Scenario 2: Incrementing counter
+store.dispatch({ type: ADD });
+store.dispatch({ type: ADD });
 
-dispatch({ type: ADD });
-console.log(getState());
+//Scenario 3: Decrementing the counter
+store.dispatch({ type: SUBTRACT });
 
-dispatch({ type: ADD });
-console.log(getState());
-
-dispatch({ type: SUBTRACT });
-console.log(getState());
-
-dispatch({ type: RESET });
-console.log(getState());
+//Scenario 4: Resetting the counter
+store.dispatch({ type: RESET });
